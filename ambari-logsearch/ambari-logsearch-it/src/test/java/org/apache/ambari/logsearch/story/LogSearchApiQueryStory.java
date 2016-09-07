@@ -16,31 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.ambari.logsearch.story;
 
-package org.apache.ambari.logsearch.solr.metrics;
-
-import org.apache.hadoop.metrics2.sink.timeline.AbstractTimelineMetricsSink;
-import org.apache.hadoop.metrics2.sink.timeline.TimelineMetrics;
-
-public class SolrAmsClient extends AbstractTimelineMetricsSink {
-  private final String collectorHost;
-
-  public SolrAmsClient(String collectorHost) {
-    this.collectorHost = collectorHost;
-  }
-
-  @Override
-  public String getCollectorUri() {
-    return collectorHost;
-  }
-
-  @Override
-  protected int getTimeoutSeconds() {
-    return 10;
-  }
-
-  @Override
-  protected boolean emitMetrics(TimelineMetrics metrics) {
-    return super.emitMetrics(metrics);
-  }
+public class LogSearchApiQueryStory extends LogSearchStory {
 }
