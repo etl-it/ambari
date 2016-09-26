@@ -114,11 +114,13 @@
   </dependencyManagement>
   <build>
     <plugins>
+      <!-- duplicated definition 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.19</version>
       </plugin>
+      -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
@@ -144,6 +146,35 @@
               <failIfNoMatch>false</failIfNoMatch>
             </configuration>
           </execution>
+          <!-- copied from duplicated definition -->
+          <execution>
+            <id>parse-package-version</id>
+            <goals>
+              <goal>regex-property</goal>
+            </goals>
+            <configuration>
+              <name>package-version</name>
+              <value>${project.version}</value>
+              <regex>^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)(\.|-).*</regex>
+              <replacement>$1.$2.$3.$4</replacement>
+              <failIfNoMatch>true</failIfNoMatch>
+            </configuration>
+          </execution>
+          <execution>
+            <id>parse-package-release</id>
+            <goals>
+              <goal>regex-property</goal>
+            </goals>
+            <configuration>
+              <name>package-release</name>
+              <value>${project.version}</value>
+              <regex>
+                ^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)(\.|-)((([a-zA-Z]+)?([0-9]+))|(SNAPSHOT)).*
+              </regex>
+              <replacement>$7</replacement>
+              <failIfNoMatch>true</failIfNoMatch>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -166,6 +197,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.19</version>
         <configuration>
           <skip>${skipSurefireTests}</skip>
         </configuration>
@@ -195,7 +227,8 @@
           </filesets>
         </configuration>
       </plugin>
-      <plugin>
+      <!-- duplicated definition 
+      <plugin> 
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
         <version>1.8</version>
@@ -230,6 +263,7 @@
           </execution>
         </executions>
       </plugin>
+      -->
       <plugin>
         <!--Stub execution on direct plugin call - workaround for ambari rpm build process-->
         <groupId>org.codehaus.mojo</groupId>
@@ -278,6 +312,8 @@
       <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
+        <!-- missing plugin version -->
+        <version>0.12</version>
         <configuration>
           <excludes>
             <exclude>pass.txt</exclude>
