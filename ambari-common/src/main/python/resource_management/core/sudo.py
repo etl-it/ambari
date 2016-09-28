@@ -60,7 +60,7 @@ if os.geteuid() == 0:
   def chmod_extended(path, mode):
     if mode in mode_to_stat:
       st = os.stat(path)
-      os.chmod(path, st.st_mode | mode_to_stat[mode])
+      #os.chmod(path, st.st_mode | mode_to_stat[mode])
     else:
       shell.checked_call(["chmod", mode, path])
       
