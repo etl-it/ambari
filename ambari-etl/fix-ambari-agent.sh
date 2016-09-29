@@ -88,6 +88,8 @@ if [ /usr/lib/python2.6/site-packages/resource_management ] ; then
 
 fi
 
+# For DataNode Install
+
 if [ -d /usr/jdk64 ] && [ ! -h /usr/jdk64 ] ; then
 
    if [ ! -d /var/bigdata/jdk64 ] ; then
@@ -104,6 +106,10 @@ if [ -d /usr/jdk64 ] && [ ! -h /usr/jdk64 ] ; then
 
 fi
 
+
+# For Metrics Monitor Install
+
+chown -R ams:hadoop /var/ambari-agent/python2.6/site-packages/resource_monitoring
 
  
 #if [ -d /usr/hdp ] ; then
