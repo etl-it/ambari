@@ -379,7 +379,7 @@ def ams(name=None, action=None):
               cd_access="a",
               create_parents = True)
 
-    Execute(format("{sudo} chown -R {ams_user}:{user_group} {ams_monitor_dir}")
+    #Execute(format("{sudo} chown -R {ams_user}:{user_group} {ams_monitor_dir}")
     )
 
     TemplateConfig(
