@@ -380,7 +380,7 @@ def ams(name=None, action=None):
               create_parents = True)
 
     #Execute(format("{sudo} chown -R {ams_user}:{user_group} {ams_monitor_dir}")
-    )
+    #)
 
     TemplateConfig(
       format("{ams_monitor_conf_dir}/metric_monitor.ini"),
