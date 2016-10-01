@@ -111,20 +111,21 @@ fi
 
 chown -R ams:hadoop /var/ambari-agent/python2.6/site-packages/resource_monitoring
 
+# HDFS Client Install
  
-#if [ -d /usr/hdp ] ; then
-#   mv /usr/hdp /var/bigdata/
-#else
-#   mkdir /var/bigdata/hdp
-#fi
+if [ -d /usr/hdp ] ; then
+   mv /usr/hdp /var/bigdata/
+else
+   mkdir /var/bigdata/hdp
+fi
  
-#if [ ! -d /usr/hdp ] ; then    
-#   ln -s /var/bigdata/hdp /usr/hdp
-#fi
+if [ ! -d /usr/hdp ] ; then    
+   ln -s /var/bigdata/hdp /usr/hdp
+fi
 
-#if [ ! -d /usr/hdp/current/hadoop-client/conf ] ; then 
-#   mkdir -p /usr/hdp/current/hadoop-client/conf
-#fi
+if [ ! -d /usr/hdp/current/hadoop-client/conf ] ; then 
+   mkdir -p /usr/hdp/current/hadoop-client/conf
+fi
 
 #patch -N /usr/bin/hdp-select <<EOF 
 #--- /usr/bin/hdp-select.org     2016-09-02 11:58:06.000000000 +0200
