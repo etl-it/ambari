@@ -75,12 +75,12 @@ def hdfs(name=None):
               group=params.user_group
     )
 
-    Directory(params.hadoop_conf_secure_dir,
-              create_parents = True,
-              owner='root',
-              group=params.user_group,
-              cd_access='a',
-              )
+    #Directory(params.hadoop_conf_secure_dir,
+    #          create_parents = True,
+    #          owner='root',
+    #          group=params.user_group,
+    #          cd_access='a',
+    #          )
 
     XmlConfig("ssl-client.xml",
               conf_dir=params.hadoop_conf_secure_dir,
