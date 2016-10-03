@@ -84,15 +84,15 @@ def create_log_dir(dir_name):
   
 def create_local_dir(dir_name):
   import params
-  Directory(dir_name,
-            create_parents = True,
-            cd_access="a",
-            mode=0755,
-            owner=params.yarn_user,
-            group=params.user_group,
-            ignore_failures=True,
-            recursive_mode_flags = {'f': 'a+rw', 'd': 'a+rwx'},
-  )
+  #Directory(dir_name,
+  #          create_parents = True,
+  #          cd_access="a",
+  #          mode=0755,
+  #          owner=params.yarn_user,
+  #          group=params.user_group,
+  #          ignore_failures=True,
+  #          recursive_mode_flags = {'f': 'a+rw', 'd': 'a+rwx'},
+  #)
 
 @OsFamilyFuncImpl(os_family=OsFamilyImpl.DEFAULT)
 def yarn(name=None, config_dir=None):
@@ -379,10 +379,10 @@ def yarn(name=None, config_dir=None):
   )
 
   container_executor = format("{yarn_container_bin}/container-executor")
-  File(container_executor,
-      group=params.yarn_executor_container_group,
-      mode=params.container_executor_mode
-  )
+  #File(container_executor,
+  #    group=params.yarn_executor_container_group,
+  #    mode=params.container_executor_mode
+  #)
 
   File(os.path.join(config_dir, "container-executor.cfg"),
       group=params.user_group,
