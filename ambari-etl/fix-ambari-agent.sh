@@ -151,7 +151,7 @@ fi
 
 if [ ! -d /usr/hdp/current/hadoop-yarn-client ] && [ ! -h /usr/hdp/current/hadoop-yard-client ] ; then 
 
-   ln -s /usr/local/hadoop-2.7.1.2.3.4.0-3347 /usr/hdp/current/hadoop-yard-client
+   ln -s /usr/local/hadoop-2.7.1.2.3.4.0-3347 /usr/hdp/current/hadoop-yarn-client
 
 fi
 
