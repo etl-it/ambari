@@ -1,6 +1,7 @@
 #!/bin/bash
  
 mount -o remount,rw /usr
+mount -o remount,rw /usr/local
 
 #if [ -d /usr/lib/ambari-agent ] ; then 
 #   cp -a /usr/lib/ambari-agent /var/bigdata/lib
@@ -123,8 +124,35 @@ if [ ! -d /usr/hdp ] ; then
    ln -s /var/bigdata/hdp /usr/hdp
 fi
 
-if [ ! -d /usr/hdp/current/hadoop-client/conf ] ; then 
-   mkdir -p /usr/hdp/current/hadoop-client/conf
+
+# DataNode Start
+
+if [ ! -d /usr/hdp/current/hadoop-client.conf ] ; then 
+   mkdir -p /usr/hdp/current/hadoop-client.conf
+fi
+
+if [ ! -d /usr/hdp/current/hadoop-client.conf/conf ] ; then 
+   mkdir -p /usr/hdp/current/hadoop-client.conf/conf
+fi
+
+if [ ! -d /usr/hdp/current/hadoop-client ] && [ ! -h /usr/hdp/current/hadoop-client ] ; then 
+
+   ln -s /usr/local/hadoop-2.7.1.2.3.4.0-3347 /usr/hdp/current/hadoop-client
+
+fi
+
+
+if [ ! -d /usr/local/hadoop-2.7.1.2.3.4.0-3347/conf ] ; then 
+
+   ln -s /var/bigdata/hdp/current/hadoop-client.conf/conf /usr/local/hadoop-2.7.1.2.3.4.0-3347/conf 
+
+fi
+
+
+if [ ! -d /usr/hdp/current/hadoop-yarn-client ] && [ ! -h /usr/hdp/current/hadoop-yard-client ] ; then 
+
+   ln -s /usr/local/hadoop-2.7.1.2.3.4.0-3347 /usr/hdp/current/hadoop-yard-client
+
 fi
 
 #patch -N /usr/bin/hdp-select <<EOF 
@@ -259,4 +287,5 @@ fi
 #EOF
 
  
+mount -o remount,ro /usr/local
 mount -o remount,ro /usr
