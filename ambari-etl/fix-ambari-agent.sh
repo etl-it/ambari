@@ -127,6 +127,10 @@ fi
 
 # DataNode Start
 
+if [ -d /usr/hdp/current/hadoop-client ] ; then
+  mv /usr/hdp/current/hadoop-client /usr/hdp/current/hadoop-client.org
+fi
+
 if [ ! -d /usr/hdp/current/hadoop-client.conf ] ; then 
    mkdir -p /usr/hdp/current/hadoop-client.conf
 fi
@@ -148,12 +152,71 @@ if [ ! -d /usr/local/hadoop-2.7.1.2.3.4.0-3347/conf ] ; then
 
 fi
 
+if [ -d /usr/hdp/current/hadoop-yarn-client ] ; then 
+   mv /usr/hdp/current/hadoop-yarn-client /usr/hdp/current/hadoop-yarn-client.org
+fi
 
 if [ ! -d /usr/hdp/current/hadoop-yarn-client ] && [ ! -h /usr/hdp/current/hadoop-yard-client ] ; then 
 
    ln -s /usr/local/hadoop-2.7.1.2.3.4.0-3347 /usr/hdp/current/hadoop-yarn-client
 
 fi
+
+
+# For Metrics Monitor Start
+
+
+if [ /usr/lib/python2.6/site-packages/resource_monitoring ] ; then 
+
+   if [ -h /usr/lib/python2.6/site-packages/resource_monitoring ] ; then 
+
+    link=`ls -la /usr/lib/python2.6/site-packages/resource_monitoring | cut -d\> -f2 | grep /usr/lib/ambari-agent/lib/resource_monitoring`
+
+    if [ -z "$link" ] ; then 
+
+       mv /usr/lib/python2.6/site-packages/resource_monitoring /usr/lib/python2.6/site-packages/resource_monitoring.not_ambari-agent
+
+       ln -s /usr/lib/ambari-agent/lib/resource_monitoring /usr/lib/python2.6/site-packages/resource_monitoring 
+
+    fi
+
+   else
+   
+     if [ ! -d /usr/lib/ambari-agent/lib/resource_monitoring ] ; then 
+
+       mv /usr/lib/python2.6/site-packages/resource_monitoring /usr/lib/ambari-agent/lib/resource_monitoring
+
+     else
+
+       mv /usr/lib/python2.6/site-packages/resource_monitoring /usr/lib/python2.6/site-packages/resource_monitoring.org
+
+     fi
+
+     ln -s /usr/lib/ambari-agent/lib/resource_monitoring /usr/lib/python2.6/site-packages/resource_monitoring 
+     
+   fi
+
+fi
+
+if [ ! -d /usr/lib/python2.6/site-packages/resource_monitoring/psutil/build ] ; then
+   mkdir -p /usr/lib/python2.6/site-packages/resource_monitoring/psutil/build
+fi
+
+chown -R ams:hadoop /usr/lib/python2.6/site-packages/resource_monitoring/*
+
+# DataNode Start
+
+chown -R root:hadoop /usr/hdp/current/hadoop-client/conf/secure
+
+# NameNode Start
+
+
+if [ ! -d /usr/hdp/current/hadoop-hdfs-namenode ] ; then 
+
+   ln -s /usr/local/hadoop-2.7.1.2.3.4.0-3347 /usr/hdp/current/hadoop-hdfs-namenode
+
+fi
+
 
 #patch -N /usr/bin/hdp-select <<EOF 
 #--- /usr/bin/hdp-select.org     2016-09-02 11:58:06.000000000 +0200
