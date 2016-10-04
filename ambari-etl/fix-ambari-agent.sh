@@ -217,6 +217,15 @@ if [ ! -d /usr/hdp/current/hadoop-hdfs-namenode ] ; then
 
 fi
 
+# NodeManager Start 
+
+if [ ! -d /usr/hdp/current/hadoop-yarn-nodemanager ] ; then 
+
+   ln -s /usr/local/hadoop-2.7.1.2.3.4.0-3347 /usr/hdp/current/hadoop-yarn-nodemanager
+
+fi
+
+
 
 #patch -N /usr/bin/hdp-select <<EOF 
 #--- /usr/bin/hdp-select.org     2016-09-02 11:58:06.000000000 +0200
