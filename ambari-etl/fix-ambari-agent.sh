@@ -11,32 +11,6 @@ mount -o remount,rw /usr/local
 #ln -s /var/bigdata/lib/ambari-agent /usr/lib/ambari-agent
  
  
-#cd /tmp
- 
-##wget https://issues.apache.org/jira/secure/attachment/12797962/AMBARI-15796.patch
-##patch /usr/lib/python2.6/site-packages/ambari_agent/main.py   AMBARI-15796.patch
-#patch -N /usr/lib/python2.6/site-packages/ambari_agent/main.py <<EOF
-#diff --git a/ambari-agent/src/main/python/ambari_agent/main.py b/ambari-agent/src/main/python/ambari_agent/main.py
-#index b146ba8..c6ea92b 100644
-#--- a/ambari-agent/src/main/python/ambari_agent/main.py
-#+++ b/ambari-agent/src/main/python/ambari_agent/main.py
-#@@ -311,9 +311,9 @@ if __name__ == "__main__":
-#     heartbeat_stop_callback = bind_signal_handlers(agentPid)
-# 
-#     main(heartbeat_stop_callback)
-#-  except SystemExit as e:
-#-    raise e
-#-  except BaseException as e:
-#+  except SystemExit:
-#+    raise
-#+  except BaseException:
-#     if is_logger_setup:
-#-      logger.exception("Exiting with exception:" + e)
-#-  raise
-#+      logger.exception("Exiting with exception:")
-#+    raise
-# 
-#EOF
  
 if [ ! -d /var/bigdata/ambari-agent ] ; then
 
@@ -226,73 +200,26 @@ if [ ! -d /usr/hdp/current/hadoop-yarn-nodemanager ] ; then
 fi
 
 
-
-#patch -N /usr/bin/hdp-select <<EOF 
-#--- /usr/bin/hdp-select.org     2016-09-02 11:58:06.000000000 +0200
-#+++ /usr/bin/hdp-select 2016-09-02 11:59:05.000000000 +0200
-#@@ -23,7 +23,8 @@
-# import sys
-# 
-# # The global prefix and current directory
-#-root = "/usr/hdp"
-#+#root = "/usr/hdp" 
-#+root = "/var/bigdata/hdp"
-# current = root + "/current"
-# versionRegex = re.compile('[-.]') 
-#    
-#EOF
+# ZooKeeper Server Start
 
 
-#patch -N /usr/bin/hdp-select <<EOF 
-#--- /usr/bin/hdp-select	2016-09-06 17:09:28.000000000 +0200
-#+++ hdp-select	2016-09-06 17:29:08.000000000 +0200
-#@@ -211,10 +211,12 @@
-#   for pkg in packages:
-#     linkname = current + "/" + pkg
-#     if os.path.isdir(linkname):
-#-      print (pkg + " - " +
-#-             os.path.basename(os.path.dirname(os.readlink(linkname))))
-#-             
-#+      if os.path.islink(linkname): 
-#+         print (pkg + " - " +
-#+                os.path.basename(os.path.dirname(os.readlink(linkname))))
-#+      else:
-#+         print (pkg + " - " + 
-#+                os.path.basename(os.path.dirname(linkname)))
-#     else:
-#       print pkg + " - None"
-# 
-# 
-#EOF
+if [ ! -d /usr/hdp/current/zookeeper-server/bin ] ; then 
+
+   mkdir -p /usr/hdp/current/zookeeper-server/bin
+
+fi
 
 
-#patch -N /var/bigdata/ambari-agent/cache/common-services/HDFS/2.1.0.2.0/package/scripts/hdfs.py <<EOF 
-#--- /var/bigdata/ambari-agent/cache/common-services/HDFS/2.1.0.2.0/package/scripts/hdfs.py.bak	2016-09-07 12:49:47.527994816 +0200
-#+++ /var/bigdata/ambari-agent/cache/common-services/HDFS/2.1.0.2.0/package/scripts/hdfs.py	2016-09-07 12:51:02.987571620 +0200
-#@@ -74,13 +74,13 @@
-#               group=params.user_group
-#     )
-# 
-#-
-#-    Directory(params.hadoop_conf_secure_dir,
-#-              recursive=True,
-#-              owner='root',
-#-              group=params.user_group,
-#-              cd_access='a',
-#-              )
-#+    #Goyo 07/09/2016: comented 
-#+    #Directory(params.hadoop_conf_secure_dir,
-#+    #          recursive=True,
-#+    #          owner='root',
-#+    #          group=params.user_group,
-#+    #          cd_access='a',
-#+    #          )
-# 
-#     XmlConfig("ssl-client.xml",
-#               conf_dir=params.hadoop_conf_secure_dir,
-#
-#       
-#EOF
+if [ ! -x /usr/hdp/current/zookeeper-server/bin/zkServer.sh  ] ; then 
+
+
+   ln -s /var/bigdata/ambari-agent/cache/common-services/ZOOKEEPER/3.4.5/package/files/zkServer.sh /usr/hdp/current/zookeeper-server/bin/zkServer.sh
+
+fi 
+
+
+#######################################################################
+
 
 #chown -R root:hadoop /usr/hdp/current/hadoop-client/conf/secure
 
@@ -306,57 +233,6 @@ fi
 #if [ ! -d /usr/hdp/current/hadoop-yarn-client/bin ] ; then 
 #   mkdir -p /usr/hdp/current/hadoop-yarn-client/bin 
 #fi
-
-
-#patch -N /var/bigdata/ambari-agent/cache/common-services/YARN/2.1.0.2.0/package/scripts/yarn.py <<EOF 
-#--- /var/bigdata/ambari-agent/cache/common-services/YARN/2.1.0.2.0/package/scripts/yarn.py.bak	2016-09-07 13:18:11.061006290 +0200
-#+++ /var/bigdata/ambari-agent/cache/common-services/YARN/2.1.0.2.0/package/scripts/yarn.py	2016-09-07 13:19:13.744475744 +0200
-#@@ -399,12 +399,13 @@
-#               group=params.user_group
-#     )
-# 
-#-    Directory(params.hadoop_conf_secure_dir,
-#-              recursive=True,
-#-              owner='root',
-#-              group=params.user_group,
-#-              cd_access='a',
-#-              )
-#+    #Goyo 07/09/2016: comented 
-#+    #Directory(params.hadoop_conf_secure_dir,
-#+    #          recursive=True,
-#+    #          owner='root',
-#+    #          group=params.user_group,
-#+    #          cd_access='a',
-#+    #          )
-# 
-#     XmlConfig("ssl-client.xml",
-#               conf_dir=params.hadoop_conf_secure_dir,
-#EOF
-
-
-
-#patch -N /var/bigdata/ambari-agent/cache/common-services/AMBARI_METRICS/0.1.0/package/scripts/ams.py<<EOF 
-#--- /var/bigdata/ambari-agent/cache/common-services/AMBARI_METRICS/0.1.0/package/scripts/ams.py.bak	2016-09-07 16:22:40.137870945 +0200
-#+++ /var/bigdata/ambari-agent/cache/common-services/AMBARI_METRICS/0.1.0/package/scripts/ams.py	2016-09-07 16:22:10.465627046 +0200
-#@@ -367,11 +367,12 @@
-#     )
-# 
-# 
-#-    Directory(format("{ams_monitor_dir}/psutil/build"),
-#-              owner=params.ams_user,
-#-              group=params.user_group,
-#-              cd_access="a",
-#-              recursive=True)
-#+    #Goyo: 07/09/2016
-#+    #Directory(format("{ams_monitor_dir}/psutil/build"),
-#+    #          owner=params.ams_user,
-#+    #          group=params.user_group,
-#+    #          cd_access="a",
-#+    #          recursive=True)
-# 
-#     Execute(format("{sudo} chown -R {ams_user}:{user_group} {ams_monitor_dir}")
-#     )
-#EOF
 
  
 mount -o remount,ro /usr/local
