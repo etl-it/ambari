@@ -180,6 +180,8 @@ chown -R ams:hadoop /usr/lib/python2.6/site-packages/resource_monitoring/*
 
 # DataNode Start
 
+mkdir -p /usr/hdp/current/hadoop-client/conf/secure
+
 chown -R root:hadoop /usr/hdp/current/hadoop-client/conf/secure
 
 # NameNode Start
@@ -203,19 +205,54 @@ fi
 # ZooKeeper Server Start
 
 
-if [ ! -d /usr/hdp/current/zookeeper-server/bin ] ; then 
+if [ -d /usr/hdp/current/zookeeper-server ] ; then 
 
-   mkdir -p /usr/hdp/current/zookeeper-server/bin
+    mv /usr/hdp/current/zookeeper-server /usr/hdp/current/zookeeper-server.conf
 
 fi
 
 
-if [ ! -x /usr/hdp/current/zookeeper-server/bin/zkServer.sh  ] ; then 
+if [ ! -h /usr/hdp/current/zookeeper-server ] ; then 
 
-
-   ln -s /var/bigdata/ambari-agent/cache/common-services/ZOOKEEPER/3.4.5/package/files/zkServer.sh /usr/hdp/current/zookeeper-server/bin/zkServer.sh
+   ln -s /usr/share/zookeeper /usr/hdp/current/zookeeper-server  
 
 fi 
+
+
+#if [ ! -x /usr/hdp/current/zookeeper-server/bin/zkServer.sh  ] ; then 
+#
+#   ln -s /var/lib/ambari-agent/cache/common-services/ZOOKEEPER/3.4.5/package/files/zkServer.sh /usr/hdp/current/zookeeper-server/bin/zkServer.sh
+#
+#fi 
+
+
+# Metrics Collector Start
+
+if [ -d /usr/lib/ams-hbase ] ; then 
+
+   mv /usr/lib/ams-hbase /usr/lib/ams-hbase.org 
+
+   if [ ! -d /var/bigdata/ams-hbase ] ; then 
+
+      mkdir /var/bigdata/ams-hbase
+
+      cp -a /usr/lib/ams-hbase.org/* /var/bigdata/ams-hbase
+
+   fi
+  
+   ln -s /var/bigdata/ams-hbase /usr/lib/ams-hbase
+
+fi
+  
+# SNameNode Start 
+
+if [ ! -d /etc/hadoop ] ; then 
+
+   mkdir -p /etc/hadoop
+
+fi
+
+ln -s /var/bigdata/hdp/current/hadoop-client.conf/conf  /etc/hadoop/conf 
 
 
 #######################################################################
