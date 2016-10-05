@@ -219,6 +219,27 @@ if [ ! -h /usr/hdp/current/zookeeper-server ] ; then
 fi 
 
 
+if [ ! -d /usr/hdp/current/zookeeper-server.conf ] ; then 
+
+   mkdir -p /usr/hdp/current/zookeeper-server.conf
+
+fi 
+
+
+if [ -d /usr/share/zookeeper ] ; then 
+
+   if [ ! -h /usr/share/zookeeper/conf ] ; then 
+
+      ln /etc/zookeeper/conf /usr/share/zookeeper/conf
+
+   fi
+
+fi 
+
+update-alternatives --install /etc/zookeeper/conf zookeeper-conf /var/bigdata/hdp/current/zookeeper-server.conf/conf 100
+
+
+
 #if [ ! -x /usr/hdp/current/zookeeper-server/bin/zkServer.sh  ] ; then 
 #
 #   ln -s /var/lib/ambari-agent/cache/common-services/ZOOKEEPER/3.4.5/package/files/zkServer.sh /usr/hdp/current/zookeeper-server/bin/zkServer.sh
