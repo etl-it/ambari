@@ -230,14 +230,30 @@ if [ -d /usr/share/zookeeper ] ; then
 
    if [ ! -h /usr/share/zookeeper/conf ] ; then 
 
-      ln /etc/zookeeper/conf /usr/share/zookeeper/conf
+      ln -s /etc/zookeeper/conf /usr/share/zookeeper/conf
 
    fi
 
-fi 
+fi
 
 update-alternatives --install /etc/zookeeper/conf zookeeper-conf /var/bigdata/hdp/current/zookeeper-server.conf/conf 100
 
+if [ ! -h /etc/zookeeper/conf/environment ] ; then 
+
+ ln -s /var/bigdata/hdp/current/zookeeper-server.conf/conf/zookeeper-env.sh /etc/zookeeper/conf/environment
+
+fi
+
+
+for jarfile in zookeeper.jar log4j-1.2.jar slf4j-api.jar slf4j-log4j12.jar ; do 
+
+  if [ -h /usr/share/zookeeper/$jarfile ] ; then
+
+     ln -s /usr/share/java/$jarfile /usr/share/zookeeper/jarfile 
+
+  fi
+
+done
 
 
 #if [ ! -x /usr/hdp/current/zookeeper-server/bin/zkServer.sh  ] ; then 
@@ -274,6 +290,49 @@ if [ ! -d /etc/hadoop ] ; then
 fi
 
 ln -s /var/bigdata/hdp/current/hadoop-client.conf/conf  /etc/hadoop/conf 
+
+# History Server Start 
+
+if [ -d /usr/hdp/current/hadoop-mapreduce-historyserver ] ; then 
+
+   mv /usr/hdp/current/hadoop-mapreduce-historyserver /usr/hdp/current/hadoop-mapreduce-historyserver.conf
+
+fi
+
+if [ ! -h /usr/hdp/current/hadoop-mapreduce-historyserver ] ; then 
+
+  ln -s /usr/local/hadoop-2.7.1.2.3.4.0-3347 /usr/hdp/current/hadoop-mapreduce-historyserver
+
+fi
+
+
+# App Timeline Server Start 
+
+if [ -d /usr/hdp/current/hadoop-yarn-timelineserver ] ; then 
+
+  mv /usr/hdp/current/hadoop-yarn-timelineserver /usr/hdp/current/hadoop-yarn-timelineserver.conf
+
+fi
+
+if [ ! -h /usr/hdp/current/hadoop-yarn-timelineserver ] ; then 
+
+  ln -s /usr/local/hadoop-2.7.1.2.3.4.0-3347 /usr/hdp/current/hadoop-yarn-timelineserver 
+
+fi 
+
+# ResourceManager Start 
+
+if [ -d /usr/hdp/current/hadoop-yarn-resourcemanager ] ; then 
+
+  mv /usr/hdp/current/hadoop-yarn-resourcemanager /usr/hdp/current/hadoop-yarn-resourcemanager.conf
+
+fi
+
+if [ ! -h /usr/hdp/current/hadoop-yarn-resourcemanager ] ; then 
+
+  ln -s /usr/local/hadoop-2.7.1.2.3.4.0-3347 /usr/hdp/current/hadoop-yarn-resourcemanager
+
+fi 
 
 
 #######################################################################
