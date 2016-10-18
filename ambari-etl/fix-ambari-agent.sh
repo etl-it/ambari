@@ -335,6 +335,49 @@ if [ ! -h /usr/hdp/current/hadoop-yarn-resourcemanager ] ; then
 fi 
 
 
+# Grafana Start
+
+chown ams:root /var/log/ambari-metrics-grafana
+
+if [ ! -d /var/run/ambari-metrics-grafana ] ; then 
+ 
+   mkdir /var/run/ambari-metrics-grafana
+ 
+fi
+
+chown ams:root /var/run/ambari-metrics-grafana
+
+
+# RegionServer Start
+
+if [ -d /usr/hdp/current/hbase-regionserver ] ; then 
+
+   mv /usr/hdp/current/hbase-regionserver /usr/hdp/current/hbase-regionserver.org
+
+fi
+
+if [ ! -h /usr/hdp/current/hbase-regionserver ] ; then 
+
+   ln -s /var/bigdata/ams-hbase /usr/hdp/current/hbase-regionserver 
+
+fi
+
+# HBase Master Start
+
+if [ -d  /usr/hdp/current/hbase-master ] ; then 
+
+   mv /usr/hdp/current/hbase-master /usr/hdp/current/hbase-master.conf
+
+fi
+
+
+if [ ! -h /usr/hdp/current/hbase-master ] ; then 
+
+   ln -s /var/bigdata/ams-hbase /usr/hdp/current/hbase-master 
+
+fi 
+
+
 #######################################################################
 
 
