@@ -98,6 +98,13 @@ if [ ! -d /usr/hdp ] ; then
    ln -s /var/bigdata/hdp /usr/hdp
 fi
 
+if [ ! -d /usr/hdp/current/hadoop-client/conf/secure ] ; then 
+  
+   mkdir -p /usr/hdp/current/hadoop-client/conf/secure 
+   chown -R hdfs:hadoop /usr/hdp/current/hadoop-client/conf/secure
+
+fi
+
 
 # DataNode Start
 
@@ -202,6 +209,16 @@ if [ ! -d /usr/hdp/current/hadoop-yarn-nodemanager ] ; then
 fi
 
 
+# ZooKeeper Client
+
+
+if [ -d /usr/hdp/current/zookeeper-client ] ; then 
+
+    mv /usr/hdp/current/zookeeper-client /usr/hdp/current/zookeeper-client.conf
+
+fi
+
+
 # ZooKeeper Server Start
 
 
@@ -212,11 +229,11 @@ if [ -d /usr/hdp/current/zookeeper-server ] ; then
 fi
 
 
-if [ ! -h /usr/hdp/current/zookeeper-server ] ; then 
+#if [ ! -h /usr/hdp/current/zookeeper-server ] ; then 
 
-   ln -s /usr/share/zookeeper /usr/hdp/current/zookeeper-server  
+#   ln -s /usr/share/zookeeper /usr/hdp/current/zookeeper-server  
 
-fi 
+#fi 
 
 
 if [ ! -d /usr/hdp/current/zookeeper-server.conf ] ; then 
@@ -226,15 +243,15 @@ if [ ! -d /usr/hdp/current/zookeeper-server.conf ] ; then
 fi 
 
 
-if [ -d /usr/share/zookeeper ] ; then 
+#if [ -d /usr/share/zookeeper ] ; then 
 
-   if [ ! -h /usr/share/zookeeper/conf ] ; then 
+#   if [ ! -h /usr/share/zookeeper/conf ] ; then 
 
-      ln -s /etc/zookeeper/conf /usr/share/zookeeper/conf
+#      ln -s /etc/zookeeper/conf /usr/share/zookeeper/conf
 
-   fi
+#   fi
 
-fi
+#fi
 
 update-alternatives --install /etc/zookeeper/conf zookeeper-conf /var/bigdata/hdp/current/zookeeper-server.conf/conf 100
 
@@ -371,11 +388,100 @@ if [ -d  /usr/hdp/current/hbase-master ] ; then
 fi
 
 
-if [ ! -h /usr/hdp/current/hbase-master ] ; then 
+#if [ ! -h /usr/hdp/current/hbase-master ] ; then 
 
-   ln -s /var/bigdata/ams-hbase /usr/hdp/current/hbase-master 
+#   ln -s /var/bigdata/ams-hbase /usr/hdp/current/hbase-master 
+
+#fi 
+
+
+for l in hive-client pig-client tez-client hbase-client hive-webhcat accumulo-client ; do 
+
+ if [ -d /usr/hdp/current/${l} ] ; then 
+
+   if [ ! -h /usr/hdp/current/${l} ] ; then 
+ 
+      if [ ! -d /usr/hdp/current/${l}.conf ] ; then 
+
+         mv /usr/hdp/current/${l} /usr/hdp/current/${l}.conf
+
+      else
+
+        mv /usr/hdp/current/${l} /usr/hdp/current/${l}.org 
+
+      fi
+
+   fi
+
+ fi
+
+done
+
+if [ ! -d /usr/hdp/2.4.3.0-227/hbase-client ] ; then 
+
+   mkdir -p /usr/hdp/2.4.3.0-227/hbase-client 
 
 fi 
+
+
+# FIX IT!!!
+if [ ! -h /usr/hdp/current/hbase-client ] ; then 
+
+   ln -s /usr/hdp/2.4.3.0-227/hbase-client /usr/hdp/current/hbase-client
+
+fi
+
+
+if [ ! -d /usr/hdp/current/hbase-client/conf ] ; then 
+
+   if [ ! -d /usr/hdp/current/hbase-client.conf ] ; then 
+
+      mkdir -p /usr/hdp/current/hbase-client.conf 
+
+   fi
+
+   ln -s /usr/hdp/current/hbase-client.conf /usr/hdp/current/hbase-client/conf 
+
+fi
+
+
+# HBase Client Install
+
+# createCommandSymlinks
+
+#for c in ranger-kms ; do
+
+#   if [ ! -h /usr/hdp/current/${c} ] ; then 
+
+#      /usr/bin/${c} /usr/hdp/current/${c}
+
+#   fi 
+
+#done 
+
+
+# Spark Client Install
+
+if [ -d  /usr/hdp/current/spark-client ] ; then 
+
+   if [ ! -h /usr/hdp/current/spark-client ] ; then 
+
+      if [ ! -d /usr/hdp/current/spark-client.conf ] ; then 
+
+         mv /usr/hdp/current/spark-client /usr/hdp/current/spark-client.conf 
+
+      else
+
+         mv /usr/hdp/current/spark-client /usr/hdp/current/spark-client.org
+
+
+      fi
+     
+
+   fi 
+
+
+fi
 
 
 #######################################################################
