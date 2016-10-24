@@ -9,7 +9,15 @@ mount -o remount,rw /usr/local
 #fi 
  
 #ln -s /var/bigdata/lib/ambari-agent /usr/lib/ambari-agent
- 
+
+
+# JDK support
+
+if [ ! -d /var/bigdata/jdk64 ] ; then 
+
+   mkdir /var/bigdata/jdk64
+
+fi 
  
  
 if [ ! -d /var/bigdata/ambari-agent ] ; then
