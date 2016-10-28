@@ -41,8 +41,8 @@ def zookeeper_service(action='start', upgrade_type=None):
     conf_select.select(params.stack_name, "zookeeper", params.current_version)
     stack_select.select("zookeeper-server", params.version)
 
-  #cmd = format("env ZOOCFGDIR={config_dir} ZOOCFG=zoo.cfg {zk_bin}/zkServer.sh")
-  cmd = format("env ZOOCFGDIR={config_dir} ZOOCFG={config_dir}/zoo.cfg {zk_bin}/zkServer.sh")
+  cmd = format("env ZOOCFGDIR={config_dir} ZOOCFG=zoo.cfg {zk_bin}/zkServer.sh")
+  #cmd = format("env ZOOCFGDIR={config_dir} ZOOCFG={config_dir}/zoo.cfg {zk_bin}/zkServer.sh")
 
   if action == 'start':
     daemon_cmd = format("source {config_dir}/zookeeper-env.sh ; {cmd} start")
