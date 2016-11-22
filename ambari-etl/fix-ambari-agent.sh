@@ -468,6 +468,13 @@ fi
 #done 
 
 
+if [ -! d /usr/hdp/current/hadoop-client/conf ] ; then 
+
+   mkdir /usr/hdp/current/hadoop-client/conf
+
+fi
+
+
 # Spark Client Install
 
 if [ -d  /usr/hdp/current/spark-client ] ; then 
